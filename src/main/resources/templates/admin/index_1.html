@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>智慧养老系统后台管理</title>
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../../static/admin/css/adminstyle.css" th:href="@{/admin/css/adminstyle.css}">
+    <link rel="stylesheet" href="../../static/admin/common/layui/css/layui.css" th:href="@{/admin/common/layui/css/layui.css}">
+    <link rel="stylesheet" href="../../static/admin/common/global.css" th:href="@{/admin/common/global.css}">
+<!--    <script src="../../static/admin/common/layui/layui.js" th:src="@{/admin/common/layui/layui.js}"></script>-->
+<!--    <script src="../../static/admin/js/larry.js" th:src="@{/admin/js/larry.js}"></script>-->
+<!--    <script src="../../static/admin/js/index.js" th:src="@{/admin/js/index.js}"></script>-->
+    <script src="../../static/admin/js/navtab.js" th:src="@{/admin/js/navtab.js}"></script>
+</head>
+<body>
+<div class="layui-layout layui-layout-admin" id="layui_layout">
+
+<!--     左侧侧边导航结束 -->
+<!--     右侧主体内容 -->
+    <div class="layui-body" id="larry-body" style="bottom: 0;border-left: solid 2px #2299ee;">
+        <div class="layui-tab layui-tab-card larry-tab-box" id="larry-tab" lay-filter="demo" lay-allowclose="true">
+            <div class="go-left key-press pressKey" id="titleLeft" title="滚动至最右侧"><i
+                    class="larry-icon larry-weibiaoti6-copy"></i></div>
+            <ul class="layui-tab-title">
+                <li class="layui-this" id="admin-home"><i class="iconfont icon-diannao1"></i><em>后台首页</em></li>
+            </ul>
+            <div class="go-right key-press pressKey" id="titleRight" title="滚动至最左侧"><i
+                    class="larry-icon larry-right"></i></div>
+            <ul class="layui-nav closeBox">
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <iframe class="larry-iframe" data-id='0' id="mainiframe" style="min-height: 500px; "
+                            th:replace="main.html">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 底部区域 -->
+    <div class="layui-footer layui-larry-foot" id="larry-footer">
+        <div class="layui-mian">
+            <p class="p-admin">
+                版权所有
+            </p>
+        </div>
+    </div>
+</div>
+
+
+<!-- 左侧侧边导航结束 -->
+<script type="text/javascript" src="/admin/common/layui/layui.js" th:src="@{/admin/common/layui/layui.js}"></script>
+<script type="text/javascript" src="/admin/js/larry.js" th:src="@{/admin/js/larry.js}"></script>
+<script type="text/javascript" src="/admin/js/index.js" th:src="@{/admin/js/index.js}"></script>
+<script type="application/javascript">
+    function modify_class(a){
+        var has_class = $(a).parent().hasClass('layui-nav-itemed')
+        if (has_class) {
+            $(a).parent().removeClass('layui-nav-itemed')
+        } else {
+            $(a).parent().addClass('layui-nav-itemed')
+        }
+    }
+</script>
+</body>
+</html>

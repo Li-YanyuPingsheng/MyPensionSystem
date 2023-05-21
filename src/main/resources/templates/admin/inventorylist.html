@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>商品库存信息</title>
+  <!-- 其他meta信息和css链接 -->
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="stylesheet" href="../../static/admin/common/layui/css/layui.css">
+  <link rel="stylesheet" href="../../static/admin/common/bootstrap/css/bootstrap.css">
+  <link rel="stylesheet" href="../../static/admin/css/personal.css">
+  <link rel="stylesheet" href="../../static/admin/common/global.css">
+  <script src="../../static/admin/js/newslist.js"></script>
+  <script src="../../static/admin/common/layui/layui.js"></script>
+
+  <script src="../../static/layer/jquery-2.0.3.min.js"></script>
+  
+  <style type="text/css">
+    .layui-input-inline li {
+      float: left;
+    }
+  </style>
+
+</head>
+<body>
+<section class="layui-larry-box">
+  <div class="larry-personal">
+    <div class="layui-tab">
+      <blockquote class="layui-elem-quote news_search">
+
+        <div class="layui-inline" style="border:0px solid red;width: 930px;">
+          <form class="layui-form" th:action="@{/admin/inventoryList}" method="post">
+            <div class="layui-input-inline" style="float: left">
+              <input th:value="${key}" placeholder="请输入商品名称" name="key">
+            </div>
+
+            <!-- 三级联动 -->
+            <div class="layui-input-inline" style="float: left;margin-left: 5px;">
+              <ul>
+                <li>
+                  <select name="fid"  id="fid" lay-filter="fid" onChange="Change_Select()">
+                    <option value="">请选择类别</option>
+                    <option th:each="fcategory : ${ctlist}" th:value="${fcategory.id}" th:text="${fcategory.name}"></option>
+                  </select>
+                </li>
+                <li>
+                  <select name="cid" id="cid"  lay-filter="cid">
+                    <option value="">请选择上一级类别</option>
+                  </select>
+                </li>
+
+                <li>
+                  <select name="mid" id="mid"  lay-filter="mid">
+                    <option value="">请选择上一级类别</option>
+                  </select>
+                </li>
+              </ul>
+            </div>
+            <!-- 三级联动 -->
+          </form>
+          <a class="layui-btn"  href="javascript:void(0)" onclick="searchnew()">查询</a>
+        </div>
+
+      </blockquote>
+      <div class="layui-form news_list">
+        <table class="layui-table" style="font-size:12px;">
+          <colgroup>
+            <col width="15%">
+            <col width="20%">
+            <col width="15%">
+            <col width="15%">
+            <col width="15%">
+            <col width="">
+          </colgroup>
+          <thead>
+          <tr>
+            <th>商品图片</th>
+            <th>商品名称</th>
+            <th>商品分类</th>
+            <th>商品价格</th>
+            <th>库存数量</th>
+            <th>操作</th>
+          </tr>
+          </thead>
+          <tbody class="news_content" id="userTbody">
+          <tr th:each="product : ${list}">
+            <td><img th:src="@{'/upload/' + ${product.filename}}" style="width: 60px;height: 60px;"/></td>
+            <td th:text="${product.productname}"></td>
+            <td th:text="${product.fcategory.name + '/' + product.ccategory.name + '/' + product.mcategory.name}"></td>
+            <td th:text="${product.price}"></td>
+            <td th:text="${product.inventory.num}"></td>
+            <td>
+              <a class="layui-btn layui-btn-mini" th:href="@{'/inventoryadd?productid=' + ${product.id}}"><i class="iconfont icon-edit"></i> 入库</a>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" style="font-weight: bold;font-family:楷体;font-weight: bold; color:blue" colspan="10">
+              <span th:text="'共' + ${total} + '条记录'"></span>
+              <a th:href="@{'/inventoryList?index=1'}" style="font-family:楷体;">首页</a>&nbsp;&nbsp;
+              <a th:if="${index > 1}" th:href="@{'/inventoryList?index=' + ${index - 1}}" style="font-family:楷体;">上一页</a>
+              <a th:unless="${index > 1}" href="javascrip:void(0)" style="font-family:楷体;">上一页</a>&nbsp;&nbsp;
+              <a th:if="${pages > index}" th:href="@{'/inventoryList?index=' + ${index + 1}}" style="font-family:楷体;">下一页</a>
+              <a th:unless="${pages > index}" href="javascrip:void(0)" style="font-family:楷体;">下一页</a>&nbsp;&nbsp;
+              <a th:href="@{'/inventoryList?index=' + ${pages}}" style="font-family:楷体;">末页</a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="larry-table-page clearfix">
+        </div>
+      </div>
+</section>
+
+<script>
+  layui.use(['jquery','layer','element','laypage'],function(){
+    // layui初始化
+    window.jQuery = window.$ = layui.jquery;
+    window.layer = layui.layer;
+    var element = layui.element(),
+            laypage = layui.laypage;
+
+
+    laypage({
+      cont: 'page',
+      pages: 10 //总页数
+      ,
+      groups: 5 //连续显示分页数
+      ,
+      jump: function(obj, first) {
+        //得到了当前页，用于向服务端请求对应数据
+        var curr = obj.curr;
+        if(!first) {
+          //layer.msg('第 '+ obj.curr +' 页');
+        }
+      }
+    });
+
+    laypage({
+      cont: 'page2',
+      pages: 10 //总页数
+      ,
+      groups: 5 //连续显示分页数
+      ,
+      jump: function(obj, first) {
+        //得到了当前页，用于向服务端请求对应数据
+        var curr = obj.curr;
+        if(!first) {
+          //layer.msg('第 '+ obj.curr +' 页');
+        }
+      }
+    });
+  });
+
+  function searchnew(){
+    //${"#searchform"}.submit();
+    searchform.submit()
+
+  }
+
+  function deleteAll(){
+
+    layer.confirm('是否确认删除？', {
+      btn: ['是','否'] //按钮
+    }, function(){
+
+      var len = $("input[name='checked']:checked").length;
+      if(len!=0){
+        var checkedbox = $("input[name='checked']:checked");
+        var arr = new Array();
+        $(checkedbox).each(function(i){
+          arr[i] = $(this).val();
+        });
+        var vals = arr.join(",");
+        $.ajax({
+          type:"post",
+          url:"productDelAll?vals="+vals,
+          date:"",
+          success:function(msg){
+            location.replace("productList");
+          }
+        })
+      }else{
+        layer.msg("请选择要删除的项");
+      }
+
+
+    }, function(){
+    });
+    //var $checkbox = $("input[name='checked']");
+    //var len = $("input[name='checked']:checked").length;
+
+  }
+
+  function updateFkstatus(id){
+
+    layer.confirm('商品是否付款？', {
+      btn: ['是','否'] //按钮
+    }, function(){
+
+      location.replace("/booksalessm/admin/updateFkstatus?id="+id);
+
+    }, function(){
+    });
+
+  }
+
+
+
+
+
+
+
+  layui.use(['form','upload'],function(){
+    var form = layui.form();
+    form.on('select(fid)',function(){
+      var fid = $("#fid").val();
+      $.ajax({
+        url:"searchCtype?fid="+fid,
+        datetype:"json",
+        type:"post",
+        contentType: "application/Json; charset=UTF-8",
+        success:function(msg){
+          $("#cid").empty();
+          //key2.append("<option value=\"\">请选择</option>");
+          $("#cid").append(msg);
+          form.render('select');
+        }
+      });
+
+    })
+
+
+
+
+
+
+    layui.use(['form','upload'],function(){
+      var form = layui.form();
+      form.on('select(cid)',function(){
+        var cid = $("#cid").val();
+        $.ajax({
+          url:"searchCtype?fid="+cid,
+          datetype:"json",
+          type:"post",
+          contentType: "application/Json; charset=UTF-8",
+          success:function(msg){
+            $("#mid").empty();
+            // $("#mid").html(msg);
+            $("#mid").append(msg);
+            form.render('select');
+          }
+        });
+
+      })
+
+    })
+
+
+  });
+</script>
+</body>

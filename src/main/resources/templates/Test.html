@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js">
+    </script>
+    <script>
+        function test() {
+            alert("test")
+            $.ajax({
+                type: "put",
+                url: "/test/ajax",
+                statusCode: {
+                    401: function () {
+                        alert("401")
+                        console.log("401");
+                    },
+                    404: function () {
+                        console.log("404");
+                    },
+                    200: function () {
+                        console.log("200");
+                    },
+                    302: function () {
+                        // 获取不到当前页的状态，因为已经跳转，直接为目标页的状态
+                        // 目标页返回是404，则前端接收就是404,当然如果目标页存在跨域的情况，那前端是没有状态返回的
+                        console.log("302");
+                    }
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<button onclick="test()">测试状态响应码</button>
+<form method="post" action="test">
+    <input name="username">
+    <input name="password">
+    <button type="submit">确定</button>
+</form>
+</body>
+</html>

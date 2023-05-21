@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>类别信息</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="../../static/admin/common/layui/css/layui.css" th:href="@{/admin/common/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" type="text/css" href="../../static/admin/common/bootstrap/css/bootstrap.css" th:href="@{/admin/common/bootstrap/css/bootstrap.css}" media="all">
+    <link rel="stylesheet" type="text/css" href="../../static/admin/common/global.css" th:href="@{/admin/common/global.css}" media="all">
+    <link rel="stylesheet" type="text/css" href="../../static/admin/css/personal.css" th:href="@{/admin/css/personal.css}" media="all">
+    <link href="../../static/admin/treetable/skin/jquery.treetable.css" rel="stylesheet" th:href="@{/admin/treetable/skin/jquery.treetable.css}" type="text/css"/>
+    <link href="../../static/admin/treetable/skin/jquery.treetable.theme.default.css" th:href="@{/admin/treetable/skin/jquery.treetable.theme.default.css}" rel="stylesheet" type="text/css"/>
+
+    <script type="text/javascript" src="../../static/layer/jquery-2.0.3.min.js" th:src="@{/layer/jquery-2.0.3.min.js}"></script>
+    <script type="text/javascript" src="../../static/admin/treetable/js/jquery.treetable.js" th:src="@{/admin/treetable/js/jquery.treetable.js}"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#lanmu tr").each(function () {
+                if ($(this).attr("parentid") != 0) {
+                    $(this).attr("data-tt-parent-id", $(this).attr("parentid"));
+                }
+            })
+            $("#lanmu").treetable({expandable: true}).treetable("expandAll");
+
+        })
+    </script>
+</head>
+<body>
+
+<section class="layui-larry-box">
+    <div class="larry-personal">
+        <div class="layui-tab">
+            <blockquote class="layui-elem-quote news_search">
+
+                <div class="layui-inline">
+                    <a class="layui-btn layui-btn-normal"
+                       th:href="@{categoryadd.jsp(type='father', fatherid=1)}">添加类别</a>
+                </div>
+            </blockquote>
+
+            <!-- 操作日志 -->
+            <div class="layui-form news_list">
+                <table id="lanmu" class="layui-table" style="font-size:12px;">
+                    <colgroup>
+                        <col width="35%">
+                        <col width="35%">
+                        <col width="">
+                    </colgroup>
+                    <tbody class="news_content" id="userTbody">
+
+                    <tr th:data-tt-id='${category.id}' th:parentid="${category.fatherid}" th:each="category : ${list}">
+                        <td>
+                            <span th:class='${category.leaf ==0 ? "folder" : "file"}'>
+                                <a title="" href="" th:value="${category.name}">${category.name}</a>
+                            </span>
+                            <div th:if="${category.fatherid ==0}">
+                                <a th:title="${category.id}" type="button" class="action-button"
+                                   th:href="@{categorychildadd.jsp(type='leaf', fatherid=${category.id})}"
+                                   style="font-size: 8px;"><img src="images/add.gif">
+                                </a>
+                                <a th:title="${category.id}" type="button" class="action-button"
+                                   th:href="@{showCategory?id=${category.id}}" style="font-size: 8px;"><img
+                                        src="images/icon_import.gif">
+                                </a>
+                                <a th:if="${category.leaf==1}" lanmuid='' title="删除"
+                                   class="btn-lanmu-delete action-button" type='button'
+                                   th:href="@{javascript:del('${category.id}')}"><img src="images/del.gif">
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr th:data-tt-id='${childcategory.id}' th:parentid="${childcategory.fatherid}"
+                        th:each="childcategory : ${category.childlist}">
+                        <td>
+                            <span th:class='${childcategory.leaf == 0 ? "folder":"file"}'>
+                                <a title="" href="" th:text="${childcategory.name}">${childcategory.name}</a>
+                            </span>
+
+                            <a th:title="${childcategory.id}" type="button" class="action-button"
+                               th:href="@{categorychildadd.jsp(type='leaf', fatherid=${category.id})}"
+                               style="font-size: 8px;"><img src="images/add.gif"></a>
+
+                            <a th:title="${childcategory.id}" type="button" class="action-button"
+                               th:href="@{showCategory?id=${childcategory.id}}" style="font-size: 8px;"><img
+                                    src="images/icon_import.gif"> </a>
+
+                            <a th:if="${childcategory.leaf==1}" th:lanmuid='${mincategory.id}' title="删除"
+                               class="btn-lanmu-delete action-button" type='button'
+                               th:href="@{javascript:del('${childcategory.id}')}"><img
+                                    src="images/del.gif"></a>
+                        </td>
+                    </tr>
+
+                    <tr th:data-tt-id='${mincategory.id}' th:parentid="${mincategory.fatherid}"
+                        th:each="mincategory : ${childcategory.minlist}">
+                        <td>
+                            <span th:class='${mincategory.leaf == 0 ? "folder":"file"}'>
+                                <a title="" href="" th:text="${mincategory.name}">${mincategory.name}</a>
+                            </span>
+                            <div th:if="${mincategory.leaf ==1}">
+                                <a title="编辑" type="button" class="action-button"
+                                   th:href="@{showCategory(id=${mincategory.id})}"
+                                   style="font-size: 8px;"><img src="images/icon_import.gif"> </a>
+                            </div>
+                            <a th:lanmuid='${mincategory.id}' title="删除"
+                               class="btn-lanmu-delete action-button" type='button'
+                               th:href="@{javascript:del('${mincategory.id}')}"><img src="images/del.gif">
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+
+                </table>
+                <div class="larry-table-page clearfix">
+                </div>
+            </div>
+            <!-- 登录日志 -->
+        </div>
+    </div>
+
+</section>
+
+<script type="text/javascript" src="../../static/admin/common/layui/layui.js" th:src="@{/admin/common/layui/layui.js}"></script>
+<script type="text/javascript" src="../../static/admin/js/newslist.js" th:src="@{/admin/js/newslist.js}"></script>
+<script type="text/javascript">
+    layui.use(['jquery', 'layer', 'element', 'laypage'], function () {
+        window.jQuery = window.$ = layui.jquery;
+        window.layer = layui.layer;
+        var element = layui.element(),
+            laypage = layui.laypage;
+
+
+        laypage({
+            cont: 'page',
+            pages: 10 //总页数
+            ,
+            groups: 5 //连续显示分页数
+            ,
+            jump: function (obj, first) {
+                //得到了当前页，用于向服务端请求对应数据
+                var curr = obj.curr;
+                if (!first) {
+                    //layer.msg('第 '+ obj.curr +' 页');
+                }
+            }
+        });
+
+        laypage({
+            cont: 'page2',
+            pages: 10 //总页数
+            ,
+            groups: 5 //连续显示分页数
+            ,
+            jump: function (obj, first) {
+                //得到了当前页，用于向服务端请求对应数据
+                var curr = obj.curr;
+                if (!first) {
+                    //layer.msg('第 '+ obj.curr +' 页');
+                }
+            }
+        });
+    });
+
+    function searchnew() {
+        //${"#searchform"}.submit();
+        searchform.submit()
+
+    }
+
+
+    function del(categoryid) {
+        location.replace('categoryDel?id=' + categoryid);
+    }
+</script>
+</body>
+</html>

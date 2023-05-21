@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Home</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+
+  <link rel="stylesheet" th:href="@{/admin/common/layui/css/layui.css}">
+  <link rel="stylesheet" th:href="@{/admin/common/global.css}">
+  <link rel="stylesheet" th:href="@{/admin/common/bootstrap/css/bootstrap.css}">
+  <link rel="stylesheet" th:href="@{/admin/css/main.css}">
+  <script th:src="@{/admin/common/layui/layui.js}"></script>
+  <script th:src="@{/admin/jsplug/echarts.min.js}"></script>
+  <script th:src="@{/js/main.js}"></script>
+</head>
+<body>
+<section class="larry-wrapper" th:fragment="mainFragment">
+  <!-- overview -->
+  <div class="row state-overview" style="text-align: center;font-size:30px;font-weight: bold;font-family: '楷体'">
+    欢迎登录智能养老系统
+  </div>
+</section>
+
+<script type="text/javascript">
+  layui.use(['jquery','layer','element'],function(){
+    window.jQuery = window.$ = layui.jquery;
+    window.layer = layui.layer;
+    window.element = layui.element();
+
+    $('.panel .tools .iconpx-chevron-down').click(function(){
+      var el = $(this).parents(".panel").children(".panel-body");
+      if($(this).hasClass("iconpx-chevron-down")){
+        $(this).removeClass("iconpx-chevron-down").addClass("iconpx-chevron-up");
+        el.slideUp(200);
+      }else{
+        $(this).removeClass("iconpx-chevron-up").addClass("iconpx-chevron-down");
+        el.slideDown(200);
+      }
+    })
+
+  });
+</script>
+
+</body>
+</html>

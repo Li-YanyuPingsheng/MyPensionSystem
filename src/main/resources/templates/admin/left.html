@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>养老</title>
+
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+
+    <link rel="stylesheet" href="../../static/admin/css/adminstyle.css" th:href="@{/admin/css/adminstyle.css}">
+    <link rel="stylesheet" href="../../static/admin/common/layui/css/layui.css"
+          th:href="@{/admin/common/layui/css/layui.css}">
+    <link rel="stylesheet" href="../../static/admin/common/global.css" th:href="@{/admin/common/layui/css/layui.css}">
+</head>
+<body>
+
+<!-- 左侧侧边导航开始 -->
+<div class="layui-side layui-side-bg layui-larry-side" id="larry-side" th:fragment="adminleft">
+    <div class="layui-side-scroll" id="larry-nav-side" lay-filter="side">
+
+        <!-- 左侧菜单 -->
+        <ul class="layui-nav layui-nav-tree">
+
+            <li class="layui-nav-item layui-this">
+                <a href="javascript:;" th:attr="data-url=@{admin/main.html}">
+                    <i class="iconfont icon-home1" data-icon="icon-home1"></i>
+                    <span>后台首页</span>
+                </a>
+            </li>
+
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <i class="iconfont icon-jiaoseguanli"></i>
+                    <span>我的面板</span>
+                    <em class="layui-nav-more"></em>
+                </a>
+                <dl class="layui-nav-child">
+                    <dd>
+                        <a href="javascript:;" th:attr="data-url=@{/admin/grInfo}">
+                            <i class="iconfont icon-geren1" data-icon='icon-geren1'></i>
+                            <span>个人信息</span>
+                        </a>
+                    </dd>
+                    <dd>
+                        <a href="javascript:;" th:attr="data-url=@{/admin/getUpdatePassword}">
+                            <i class="iconfont icon-iconfuzhi01" data-icon='icon-iconfuzhi01'></i>
+                            <span>修改密码</span>
+                        </a>
+                    </dd>
+                </dl>
+            </li>
+
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <i class="iconfont icon-wenzhang1"></i>
+                    <span>内容管理</span>
+                    <em class="layui-nav-more"></em>
+                </a>
+                <dl class="layui-nav-child">
+                    <dd th:if="${session.User.role.equals('admin')}">
+                        <a href="javascript:;" th:attr="data-url=@{/news/newsList}">
+                            <i class="iconfont icon-wenzhang2" data-icon='icon-pinglun1'></i>
+                            <span>活动管理</span>
+                        </a>
+                    </dd>
+                    <dd th:if="${session.User.role.equals('admin')}">
+                        <a href="javascript:;" th:attr="data-url=@{/admin/categoryList}">
+                            <i class="iconfont icon-wenzhang2" data-icon='icon-pinglun1'></i>
+                            <span>商品类别</span>
+                        </a>
+                    </dd>
+                    <dd th:if="${session.User.role.equals('admin')}">
+                        <a href="javascript:;" th:attr="data-url=@{/admin/productList}">
+                            <i class="iconfont icon-wenzhang2" data-icon='icon-pinglun1'></i>
+                            <span>商品管理</span>
+                        </a>
+                    </dd>
+                    <dd th:if="${session.User.role.equals('admin')} or ${session.User.role.equals('用户')}">
+                        <a href="javascript:;" th:attr="data-url=@{/admin/inventoryList}">
+                            <i class="iconfont icon-wenzhang2" data-icon='icon-pinglun1'></i>
+                            <span>库存管理</span>
+                        </a>
+                    </dd>
+                    <dd th:if="${session.User.role.equals('admin')} or ${session.User.role.equals('用户')}">
+                        <a href="javascript:;" th:attr="data-url=@{/admin/orderList}">
+                            <i class="iconfont icon-wenzhang2" data-icon='icon-pinglun1'></i>
+                            <span>订单管理</span>
+                        </a>
+                    </dd>
+                    <dd th:if="${session.User.role.equals('admin')} or ${session.User.role.equals('用户')}">
+                        <a href="javascript:;" th:attr="data-url=@{/admin/messageList}">
+                            <i class="iconfont icon-wenzhang2" data-icon='icon-pinglun1'></i>
+                            <span>留言管理</span>
+                        </a>
+                    </dd>
+                </dl>
+            </li>
+
+            <li class="layui-nav-item" th:if="${session.User.role.equals('admin')}">
+                <a href="javascript:;">
+                    <i class="iconfont icon-wenzhang1"></i>
+                    <span>统计管理</span>
+                    <em class="layui-nav-more"></em>
+                </a>
+                <dl class="layui-nav-child">
+                    <dd>
+                        <a href="javascript:;" th:attr="data-url=@{/admin/saleProduct}">
+                            <i class="iconfont icon-wenzhang2" data-icon='icon-pinglun1'></i>
+                            <span>销售量统计</span>
+                        </a>
+                    </dd>
+                    <dd>
+                        <a href="javascript:;" th:attr="data-url=@{/admin/voteProduct}">
+                            <i class="iconfont icon-wenzhang2" data-icon='icon-pinglun1'></i>
+                            <span>点赞次数统计</span>
+                        </a>
+                    </dd>
+                    <dd>
+                        <a href="javascript:;" th:attr="data-url=@{/admin/saleMoney}">
+                            <i class="iconfont icon-wenzhang2" data-icon='icon-pinglun1'></i>
+                            <span>销售额统计</span>
+                        </a>
+                    </dd>
+                    <dd>
+                        <a href="javascript:;" th:attr="data-url=@{/admin/orderNum}">
+                            <i class="iconfont icon-wenzhang2" data-icon='icon-pinglun1'></i>
+                            <span>订单量统计</span>
+                        </a>
+                    </dd>
+
+                </dl>
+            </li>
+
+            <!-- 会员管理 -->
+            <li class="layui-nav-item" th:if="${session.User.role.equals('admin')}">
+                <a href="javascript:;">
+                    <i class="iconfont icon-m-members"></i>
+                    <span>用户管理</span>
+                    <em class="layui-nav-more"></em>
+                </a>
+                <dl class="layui-nav-child">
+                    <dd>
+                        <a href="javascript:;" th:attr="data-url=@{/admin/memberList}">
+                            <i class="iconfont icon-wenzhang2" data-icon='icon-zhuti'></i>
+                            <span>会员信息</span>
+                        </a>
+                    </dd>
+
+                    <dd>
+                        <a href="javascript:;" th:attr="data-url=@{/admin/userList}">
+                            <i class="iconfont icon-wenzhang2" data-icon='icon-zhuti'></i>
+                            <span>用户信息</span>
+                        </a>
+                    </dd>
+
+                </dl>
+            </li>
+        </ul>
+
+
+    </div>
+</div>
+
+<!-- 左侧侧边导航结束 -->
+<script type="text/javascript" src="../../static/admin/common/layui/layui.js"
+        th:src="@{/admin/common/layui/layui.js}"></script>
+<script type="text/javascript" src="../../static/admin/js/larry.js" th:src="@{/admin/js/larry.js}"></script>
+<script type="text/javascript" src="../../static/admin/js/index.js" th:src="@{/admin/js/index.js}"></script>
+<script type="text/javascript" src="../../static/admin/js/navtab.js" th:src="@{/admin/js/navtab.js}"></script>
+</body>
+</html>

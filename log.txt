@@ -1,0 +1,8 @@
+5.18 下午
+修改left页面中跳转路径，admin前缀
+添加newscontroller
+修改usercontroller
+
+5.21
+用户页面查询
+管理员添加

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>评论信息</title>
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="../../static/admin/common/layui/css/layui.css" th:href="@{/admin/common/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" type="text/css" href="../../static/admin/common/bootstrap/css/bootstrap.css" th:href="@{/admin/common/bootstrap/css/bootstrap.css}" media="all">
+    <link rel="stylesheet" type="text/css" href="../../static/admin/common/global.css" th:href="@{/admin/common/global.css}" media="all">
+    <link rel="stylesheet" type="text/css" href="../../static/admin/css/personal.css" th:href="@{/admin/css/personal.css}" media="all">
+    <script type="text/javascript" src="../../static/layer/jquery-2.0.3.min.js" th:src="@{/layer/jquery-2.0.3.min.js}"></script>
+</head>
+<body>
+<section class="layui-larry-box">
+    <div class="larry-personal">
+        <div class="layui-tab">
+            <blockquote class="layui-elem-quote news_search">
+                <div class="layui-inline">
+                    <a class="layui-btn layui-btn-danger" href="javascript:void(0)" onclick="deleteAll()">批量删除</a>
+                </div>
+            </blockquote>
+
+            <!-- 操作日志 -->
+            <div class="layui-form news_list">
+                <table class="layui-table" style="font-size:12px;">
+                    <colgroup>
+                        <col width="10%">
+                        <col width="10%">
+                        <col width="10%">
+                        <col width="10%">
+                        <col width="">
+                        <col width="15%">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>
+                            <input name="" lay-skin="primary" lay-filter="allChoose" id="allChoose" type="checkbox">
+                            <div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i
+                                    class="layui-icon"></i></div>
+                        </th>
+                        <th>评论人</th>
+                        <th>好感度</th>
+                        <th>价格</th>
+                        <th>评论内容</th>
+                        <th>评论时间</th>
+                        <th>回复内容</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody class="news_content" id="userTbody">
+                    <tr th:each="comment : ${list}">
+                        <td>
+                            <input name="checked" lay-skin="primary" lay-filter="choose" type="checkbox"
+                                   th:value="${comment.id}">
+                            <div class="layui-unselect layui-form-checkbox" lay-skin="primary"><i
+                                    class="layui-icon"></i></div>
+                        </td>
+                        <td th:text="${comment.member.uname}">${comment.member.uname}</td>
+                        <td th:text="|${comment.quality}星|">${comment.quality}星</td>
+                        <td th:text="|${comment.price}星|">${comment.price}星</td>
+                        <td th:text="${comment.content}">${comment.content}</td>
+                        <td th:text="${comment.savetime}">${comment.savetime}</td>
+                        <td th:text="${comment.replycontent}">${comment.replycontent}</td>
+                        <td>
+                            <a class="layui-btn layui-btn-mini" th:href="@{commentreply.jsp(id=${comment.id})}"><i
+                                    class="iconfont icon-edit"></i> 回复</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" style="font-weight: bold;font-family:楷体;font-weight: bold; color:blue"
+                            colspan="10">
+                            <i th:text="|共${total}条记录|">共${total}条记录</i> &nbsp;&nbsp;&nbsp;&nbsp;
+                            <a th:if="${index != 1}" th:href="@{commentList(index=1)}"
+                               style="font-family:楷体;">首页</a>&nbsp;&nbsp;
+
+                            <a th:if="${index >1}" th:href="@{commentList(index=${index-1})}">上一页</a>
+                            <a th:if="${pages>index}" th:href="@{commentList(index=${index+1})}">下一页</a>
+                            <a th:if="${pages != index}" th:href="@{commentList?index=${pages}}"
+                               style="font-family:楷体;">末页</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="larry-table-page clearfix">
+                </div>
+            </div>
+            <!-- 登录日志 -->
+        </div>
+    </div>
+
+</section>
+<script type="text/javascript" src="../../static/admin/common/layui/layui.js" th:src="@{/admin/common/layui/layui.js}"></script>
+<script type="text/javascript" src="../../static/admin/js/newslist.js" th:src="@{/admin/js/newslist.js}"></script>
+<script ></script>
+<script th:inline="javascript" type="text/javascript">
+    layui.use(['jquery', 'layer', 'element', 'laypage'], function () {
+        window.jQuery = window.$ = layui.jquery;
+        window.layer = layui.layer;
+        var element = layui.element(),
+            laypage = layui.laypage;
+
+
+        laypage({
+            cont: 'page',
+            pages: 10 //总页数
+            ,
+            groups: 5 //连续显示分页数
+            ,
+            jump: function (obj, first) {
+                //得到了当前页，用于向服务端请求对应数据
+                var curr = obj.curr;
+                if (!first) {
+                    //layer.msg('第 '+ obj.curr +' 页');
+                }
+            }
+        });
+
+        laypage({
+            cont: 'page2',
+            pages: 10 //总页数
+            ,
+            groups: 5 //连续显示分页数
+            ,
+            jump: function (obj, first) {
+                //得到了当前页，用于向服务端请求对应数据
+                var curr = obj.curr;
+                if (!first) {
+                    //layer.msg('第 '+ obj.curr +' 页');
+                }
+            }
+        });
+    });
+
+    function searchnew() {
+        //${"#searchform"}.submit();
+        searchform.submit()
+
+    }
+
+    function deleteAll() {
+
+        layer.confirm('是否确认删除？', {
+            btn: ['是', '否'] //按钮
+        }, function () {
+
+            var len = $("input[name='checked']:checked").length;
+            if (len != 0) {
+                var checkedbox = $("input[name='checked']:checked");
+                var arr = new Array();
+                $(checkedbox).each(function (i) {
+                    arr[i] = $(this).val();
+                });
+                var vals = arr.join(",");
+                $.ajax({
+                    type: "post",
+                    url: "commentDelAll?vals=" + vals + "&productid=" + [[${productid}]],
+                    date: "",
+                    success: function (msg) {
+                        location.replace("commentList?productid=" + [[${productid}]]);
+                    }
+                })
+            } else {
+                layer.msg("请选择要删除的项");
+            }
+
+        }, function () {
+        });
+        //var $checkbox = $("input[name='checked']");
+        //var len = $("input[name='checked']:checked").length;
+
+    }
+
+
+</script>
+</body>
+</html>

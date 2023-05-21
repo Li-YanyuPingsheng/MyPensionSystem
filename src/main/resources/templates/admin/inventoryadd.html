@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>商品入库存</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+
+    <link rel="stylesheet" href="../../static/admin/common/layui/css/layui.css" th:href="@{/admin/common/layui/css/layui.css}">
+    <link rel="stylesheet" href="../../static/admin/common/bootstrap/css/bootstrap.css" th:href="@{/admin/common/bootstrap/css/bootstrap.css}">
+    <link rel="stylesheet" href="../../static/admin/css/personal.css" th:href="@{/admin/css/personal.css}">
+    <link rel="stylesheet" href="../../static/admin/common/global.css" th:href="@{/admin/common/global.css}">
+    <script src="../../static/admin/js/newslist.js" th:src="@{/admin/js/newslist.js}"></script>
+    <script src="../../static/admin/common/layui/layui.js" th:src="@{/admin/common/layui/layui.js}"></script>
+
+    <script src="../../static/layer/jquery-2.0.3.min.js" th:src="@{/layer/jquery-2.0.3.min.js}"></script>
+</head>
+<body>
+<section class="layui-larry-box">
+    <div class="larry-personal">
+        <header class="larry-personal-tit">
+            <span>商品入库</span>
+        </header>
+
+        <div class="larry-personal-body clearfix changepwd">
+            <form class="layui-form col-lg-4" id="inventoryform" th:action="@{/admin/inventoryAdd}" method="post" onsubmit="return inventoryadd()">
+                <input type="hidden" th:name="productid" th:value="${productid}">
+                <input type="hidden" th:name="type" value="in">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">入库数量</label>
+                    <div class="layui-input-block">
+                        <input type="text" th:name="num" id="num" required oninvalid="setCustomValidity('数量不能为空或非法输入')"  oninput="setCustomValidity('');"  pattern="[1-9]\d*" style="width: 300px;"  autocomplete="off"  class="layui-input" placeholder="数量" >
+                    </div>
+                </div>
+                <div class="layui-form-item change-submit">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" id="inventorybutton" lay-filter="demo1" >立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<script type="text/javascript" src="../../static/admin/common/layui/layui.js" th:src="@{/admin/common/layui/layui.js}"></script>
+<script type="text/javascript">
+    layui.use(['form','upload'],function(){
+        var form = layui.form();
+    });
+</script>
+</body>
+</html>

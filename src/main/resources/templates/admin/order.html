@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>下单</title>
+</head>
+<body>
+<h1>商品订单</h1>
+<form th:action="@{/submitOrder}" method="post">
+    订单编号:<input type="text" name="orderNo"><br>
+    商品名称:<input type="text" name="itemName"><br>
+    数量:<input type="number" name="count"><br>
+    单价:<input type="number" name="price"><br>
+    送货地址:<input type="text" name="address"><br>
+    <input type="submit" value="提交订单">
+</form>
+</body>
+</html>
